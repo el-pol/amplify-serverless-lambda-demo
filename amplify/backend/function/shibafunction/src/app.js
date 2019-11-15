@@ -9,6 +9,7 @@ See the License for the specific language governing permissions and limitations 
 var express = require("express");
 var bodyParser = require("body-parser");
 var awsServerlessExpressMiddleware = require("aws-serverless-express/middleware");
+const axios = require("axios");
 
 // declare a new express app
 var app = express();
@@ -43,14 +44,21 @@ app.get("/pictures/*", function(req, res) {
  * Example post method *
  ****************************/
 
-app.post("/pictures", function(req, res) {
-  // Add your code here
-  res.json({ success: "post call succeed!", url: req.url, body: req.body });
-});
+app.post("/pictures", async function(req, res) {
+  let number = 5;
+  if (req.body.number) {
+    number = req.body.number;
+  }
 
-app.post("/pictures/*", function(req, res) {
-  // Add your code here
-  res.json({ success: "post call succeed!", url: req.url, body: req.body });
+  try {
+    const response = await axios.get(
+      `http://shibe.online/api/shibes?count=${number}`
+    );
+    const data = response.data;
+    res.json({ err: null, success: "post call succeed!", data });
+  } catch (err) {
+    res.json({ err: err });
+  }
 });
 
 /****************************

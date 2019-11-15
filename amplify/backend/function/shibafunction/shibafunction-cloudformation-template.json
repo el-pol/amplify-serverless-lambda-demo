@@ -63,7 +63,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-serverless-tutorial-dev-171109-deployment",
-					"S3Key": "amplify-builds/shibafunction-48717a622b3267354b79-build.zip"
+					"S3Key": "amplify-builds/shibafunction-2f7a7064697a4f78484f-build.zip"
 				}
 			}
 		},
