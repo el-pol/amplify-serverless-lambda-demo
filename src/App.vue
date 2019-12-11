@@ -1,29 +1,48 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+    <div v-for="element in images" :key="element">
+      <img :src="element" alt="A nice Shibe dog" />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import HelloWorld from "./components/HelloWorld.vue";
+import { API } from "aws-amplify";
+
+interface ApiReturn {
+  data: string[];
+}
 
 export default Vue.extend({
   name: "app",
-  components: {
-    HelloWorld
+  data() {
+    return {
+      images: [""]
+    };
+  },
+  async mounted() {
+    const { data }: ApiReturn = await API.post("shibaapi", "/pictures", {
+      body: { number: 10 }
+    });
+    console.log("shibaData:", data);
+    this.images = data;
   }
 });
 </script>
 
 <style lang="scss">
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
   margin-top: 60px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-gap: 1rem;
+  max-width: 1000px;
+  margin: auto;
+  img {
+    height: auto;
+    width: 100%;
+  }
 }
 </style>
